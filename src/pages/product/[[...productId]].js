@@ -104,6 +104,7 @@ const ProductDetail = () =>
             localStorage.setItem( 'productToAddCart', JSON.stringify( storeContext.cart ) );
         } else
         {
+            console.log( colorList );
             if ( colorList.length >= 1 )
             {
                 productToAdd.attributes.color = color;
