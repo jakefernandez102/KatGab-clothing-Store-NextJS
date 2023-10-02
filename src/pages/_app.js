@@ -1,6 +1,6 @@
 import { AuthProvider } from '@/context/AuthProvider';
 import { StoreProvider } from '@/context/StoreProvider';
-import '../../public/styles/globals.css';
+import '@/styles/globals.css';
 
 const Noop = ( { children } ) => <>{children}</>;
 
