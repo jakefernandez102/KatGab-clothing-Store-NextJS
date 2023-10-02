@@ -17,9 +17,7 @@
     "react": "latest",
     "react-bootstrap": "^2.9.0",
     "react-dom": "latest",
-    "sweetalert2": "^11.7.31"
-  },
-  "devDependencies": {
+    "sweetalert2": "^11.7.31",
     "autoprefixer": "latest",
     "postcss": "latest",
     "tailwindcss": "latest"
