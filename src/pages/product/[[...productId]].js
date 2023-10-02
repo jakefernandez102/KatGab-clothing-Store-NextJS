@@ -31,7 +31,7 @@ const ProductDetail = () =>
         {
             try
             {
-                const { data } = await axiosClient( '/products/?populate=productImage' );
+                const { data } = await axiosClient( '/products?populate=productImage' );
                 setProducts( data.data );
             } catch ( error )
             {
