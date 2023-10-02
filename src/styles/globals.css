@@ -1,11 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '@coreui/coreui/dist/css/coreui.min.css';
+
+@font-face {
+  font-family: 'Brandon Text';
+  src: url('../../public/assets/BrandonText/HVD Fonts - BrandonText-Regular.otf');
+  src: url('../../public/assets/BrandonText/HVD Fonts - BrandonText-Bold.otf');
+  src: url('../../public/assets/BrandonText/HVD Fonts - BrandonText-RegularItalic.otf');
+  src: url('../../public/assets/BrandonText/HVD Fonts - BrandonText-Thin.otf');
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../../public/assets/BrandonText/FreeSans.otf');
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --heading-font: 'Helvetica'
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,10 +33,44 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  font-family: 'Brandon Text';
+}
+
+h2 {
+  font-family: 'Helvetica';
+}
+
+
+
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+}
+
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+
+
+
+@layer utilities {
+  .nav-item {
+    @apply relative
+  }
+
+  .nav-item::after {
+    @apply content-[''] left-0 -bottom-[1px] bg-yellow-500 h-[3px] w-[0] rounded-xl absolute duration-300
+  }
+
+  .nav-item:hover::after {
+    @apply w-[100%]
+  }
 }
