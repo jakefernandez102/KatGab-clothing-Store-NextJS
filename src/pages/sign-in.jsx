@@ -1,6 +1,5 @@
 import Layaout from '@/components/layouts/Layaout';
 import useAuth from '@/hooks/useAuth';
-import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 

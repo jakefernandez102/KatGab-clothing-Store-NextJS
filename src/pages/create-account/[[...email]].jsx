@@ -1,7 +1,6 @@
 import Layaout from '@/components/layouts/Layaout';
 import React, { useState } from 'react'
 import Link  from 'next/link';
-import { useParams } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 
@@ -9,7 +8,7 @@ const CreateAccount = () => {
 
     const {createUser} =useAuth()
     
-    const {email} = useParams()
+    
     const [name,setName] = useState('')
     const [lastName,setLastname] = useState('')
     const [phoneNumer,setPhoneNumer] = useState('')
@@ -17,6 +16,7 @@ const CreateAccount = () => {
     const [password,setPassword] = useState('')
     
     const router = useRouter()
+    const email = router.query.email
 
     const handleCreateAccount = async (e)=>{
         e.preventDefault()

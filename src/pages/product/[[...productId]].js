@@ -1,14 +1,12 @@
 import Layaout from '@/components/layouts/Layaout';
 import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import Check from '@/components/ui/Check';
-import { useParams } from 'next/navigation';
-import useStore from '@/hooks/useStore';
 import axiosClient from '@/config/axios';
 import StoreContext from '@/context/StoreProvider';
 import AuthContext from '@/context/AuthProvider';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 
 const ProductDetail = () =>
@@ -24,7 +22,8 @@ const ProductDetail = () =>
     const authContext = useContext( AuthContext );
     const storeContext = useContext( StoreContext );
 
-    const { productId = 'params' } = useParams();
+    const router = useRouter();
+    const productId = router.query.productId;
 
     useEffect( () =>
     {

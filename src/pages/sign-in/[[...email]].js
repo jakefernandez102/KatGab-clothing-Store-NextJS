@@ -1,15 +1,14 @@
 import Layaout from '@/components/layouts/Layaout';
-import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-const signIn = () =>
+const signIn = ( { email } ) =>
 {
-
+    console.log( email );
     const [emailInput, setEmailInput] = useState( '' );
     const [passwordInput, setPasswordInput] = useState( '' );
     const router = useRouter();
-    const { email } = useParams();
+
     const handleSubmit = ( e ) =>
     {
         e.preventDefault();
