@@ -36,8 +36,8 @@ export async function getStaticPaths ()
         {
             paths.push( {
                 params: {
-                    categoryUrl: category.attributes.categoryUrl,
-                    subCategoryUrl: product.attributes.subCategoryUrl
+                    categoryUrl: category?.attributes?.categoryUrl,
+                    subCategoryUrl: product?.attributes?.subCategoryUrl
                 }
             } );
         }
