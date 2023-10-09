@@ -76,8 +76,8 @@ const ProductDetail = ( { product } ) =>
         }
 
         const productToAdd = { ...selectedProduct };
-        productToAdd?.attributes?.productSize = size?.trim();
-        productToAdd?.image = productToAdd?.attributes?.productImage?.data?.filter( image => image.attributes.name.split( '_' )[1].split( '.' )[0] === color )[0].attributes.formats;
+        productToAdd.attributes.productSize = size?.trim();
+        productToAdd.image = productToAdd?.attributes?.productImage?.data?.filter( image => image.attributes.name.split( '_' )[1].split( '.' )[0] === color )[0].attributes.formats;
         if ( storeContext?.cart?.some( item => item?.id === productId ) )
         {
             localStorage.setItem( 'itemsAdded', JSON.stringify( storeContext?.itemsInCart + 1 ) );
@@ -87,7 +87,7 @@ const ProductDetail = ( { product } ) =>
                 if ( item.id === productId )
                 {
                     item.image = productToAdd?.attributes?.productImage?.data?.filter( image => image?.attributes?.name?.split( '_' )[1].split( '.' )[0] === color )[0].attributes.formats;
-                    item?.attributes?.quantity = quantity;
+                    item.attributes.quantity = quantity;
                 }
                 return item;
             } );
@@ -99,13 +99,13 @@ const ProductDetail = ( { product } ) =>
             setIsEditing( true );
             if ( colorList.length >= 1 )
             {
-                productToAdd?.attributes?.color = color;
+                productToAdd.attributes.color = color;
             }
 
-            storeContext?.setItemsInCart( quantity );
-            localStorage?.setItem( 'itemsAdded', JSON.stringify( storeContext.itemsInCart + 1 ) );
+            storeContext.setItemsInCart( quantity );
+            localStorage.setItem( 'itemsAdded', JSON.stringify( storeContext.itemsInCart + 1 ) );
 
-            productToAdd?.attributes?.quantity = +quantity;
+            productToAdd.attributes.quantity = +quantity;
 
             storeContext.setCart( [...storeContext.cart, productToAdd] );
             localStorage.setItem( 'cart', JSON.stringify( [...storeContext.cart, productToAdd] ) );
