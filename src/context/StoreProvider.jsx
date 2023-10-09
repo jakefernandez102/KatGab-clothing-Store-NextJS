@@ -9,17 +9,17 @@ const StoreProvider = ({children})=>{
     const [cart, setCart] = useState([])
     const [itemsInCart, setItemsInCart] = useState(0)
 
-    useEffect(()=>{
-        const getProducts = async ()=>{
-            try {
-                const {data} = await axiosClient('/products/?populate=productImage')
-                setProducts(data.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getProducts()
-    },[])
+    // useEffect(()=>{
+    //     const getProducts = async ()=>{
+    //         try {
+    //             const {data} = await axiosClient('/products?populate=productImage')
+    //             setProducts(data.data)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getProducts()
+    // },[])
 
     return (
         <StoreContext.Provider
@@ -41,3 +41,4 @@ export default StoreContext;
 export {
     StoreProvider
 }
+

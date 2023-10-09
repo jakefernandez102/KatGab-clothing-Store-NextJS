@@ -9,43 +9,38 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 
 
-const ProductDetail = () =>
+const ProductDetail = ( { product } ) =>
 {
+    console.log( product );
     const [selectedProduct, setSelectedProduct] = useState( {} );
     const [color, setColor] = useState( '' );
     const [colorList, setColorList] = useState( [] );
     const [size, setSize] = useState( 'XS' );
     const [quantity, setQuantity] = useState( 1 );
-    const [products, setProducts] = useState( [] );
     const [sizeSelect, setSizeSelect] = useState( [] );
+
+    const [isEditing, setIsEditing] = useState( false );
 
     const authContext = useContext( AuthContext );
     const storeContext = useContext( StoreContext );
 
     const router = useRouter();
+
     const productId = router.query.productId;
 
-    useEffect( () =>
-    {
-        const getProducts = async () =>
-        {
-            try
-            {
-                const { data } = await axiosClient( '/products?populate=productImage' );
-                setProducts( data.data );
-            } catch ( error )
-            {
-                console.log( error );
-            }
-        };
-        getProducts();
-    }, [] );
 
     useEffect( () =>
     {
-        setSelectedProduct( products?.filter( product => product?.id == productId )[0] );
+        if ( storeContext.cart )
+        {
+            if ( storeContext.cart.some( item => item.id === product[0].id ) )
+            {
+                setIsEditing( true );
+            }
+        }
+        setSelectedProduct( product[0] );
         setColor( selectedProduct?.attributes?.productImage?.data[0]?.attributes?.name?.split( '_' )[1].split( '.' )[0] );
-    }, [products] );
+    }, [selectedProduct] );
 
     useEffect( () =>
     {
@@ -61,7 +56,7 @@ const ProductDetail = () =>
         };
         getSizeSelectValues();
         getColorValues();
-    }, [products] );
+    }, [selectedProduct] );
 
     const handleSelectColorClick = ( color ) =>
     {
@@ -82,20 +77,17 @@ const ProductDetail = () =>
 
         const productToAdd = { ...selectedProduct };
         productToAdd.attributes.productSize = size.trim();
-
-        if ( storeContext.cart.some( item => item.id === +productId ) )
+        productToAdd.image = productToAdd.attributes.productImage.data.filter( image => image.attributes.name.split( '_' )[1].split( '.' )[0] === color )[0].attributes.formats;
+        if ( storeContext.cart.some( item => item.id === productId ) )
         {
-            storeContext.setItemsInCart( quantity );
             localStorage.setItem( 'itemsAdded', JSON.stringify( storeContext.itemsInCart + 1 ) );
-
-            const itemUpdated = storeContext.cart.filter( item => item.id === +productId );
-            itemUpdated[0].attributes.quantity = quantity;
 
             const updatedCart = storeContext.cart.map( item =>
             {
                 if ( item.id === productId )
                 {
-                    item.attributes.quantity = storeContext.itemsInCart;
+                    item.image = productToAdd.attributes.productImage.data.filter( image => image.attributes.name.split( '_' )[1].split( '.' )[0] === color )[0].attributes.formats;
+                    item.attributes.quantity = quantity;
                 }
                 return item;
             } );
@@ -104,18 +96,19 @@ const ProductDetail = () =>
             localStorage.setItem( 'productToAddCart', JSON.stringify( storeContext.cart ) );
         } else
         {
-            console.log( colorList );
+            setIsEditing( true );
             if ( colorList.length >= 1 )
             {
                 productToAdd.attributes.color = color;
             }
 
-            storeContext.setItemsInCart( storeContext.itemsInCart + 1 );
+            storeContext.setItemsInCart( quantity );
             localStorage.setItem( 'itemsAdded', JSON.stringify( storeContext.itemsInCart + 1 ) );
 
-            productToAdd.attributes.quantity = quantity;
+            productToAdd.attributes.quantity = +quantity;
+
             storeContext.setCart( [...storeContext.cart, productToAdd] );
-            localStorage.setItem( 'productToAddCart', JSON.stringify( storeContext.cart ) );
+            localStorage.setItem( 'cart', JSON.stringify( [...storeContext.cart, productToAdd] ) );
 
             Swal.fire( {
                 position: 'top-end',
@@ -128,15 +121,20 @@ const ProductDetail = () =>
 
     };
     return (
-        <Layaout>
+        <Layaout
+            categoryUrl={router.pathname.split( '/' )[1]}
+            subCategoryName={product[0]?.attributes?.productUrl?.split( '-' ).join( ' ' )}
+        >
             <div className='w-full flex gap-5 mt-5'>
 
                 <div className='w-1/2 flex flex-col gap-2 justify-center items-center'>
                     {
-                        selectedProduct?.attributes?.productImage?.data?.map( image => (
+                        selectedProduct?.attributes?.productImage?.data?.map( image =>
+                        (
                             color === image?.attributes?.name?.split( '_' )[1].split( '.' )[0] &&
                             <Image key={image.id} width={350} height={350} src={image.attributes.formats.medium.url} alt={image?.attributes?.name} />
-                        ) )
+                        )
+                        )
                     }
                 </div>
 
@@ -187,11 +185,10 @@ const ProductDetail = () =>
                                 className='form-control'
                                 name="size"
                                 id="size"
-                                defaultValue='N'
                                 value={size}
                                 onChange={( e ) => setSize( e.target.value )}
                             >
-                                <option value='N' selected disabled={true}>- Seleccionar -</option>
+                                <option value='N' disabled={true}>- Seleccionar -</option>
                                 {
                                     sizeSelect?.map( size => (
                                         <>
@@ -223,16 +220,18 @@ const ProductDetail = () =>
                             />
                         </div>
                     </div>
-
                     <div className='flex flex-col gap-4'>
                         <button type='button'
                             className='flex justify-center items-center gap-2 border-1 border-yellow-500 w-full py-3 hover:bg-yellow-500 duration-300'
-                            onClick={() => handleAddToCart( productId )}
+                            onClick={() => handleAddToCart( product[0].id )}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                             </svg>
-                            Agregar a la bolsa de compras
+                            {
+                                isEditing ? "Editar Producto" : "Agregar a la bolsa de compras"
+                            }
+
                         </button>
 
                         <button type='button' className='flex justify-center items-center gap-2 border-1  w-full py-3 hover:bg-rose-500 duration-300'>
@@ -250,3 +249,15 @@ const ProductDetail = () =>
 };
 
 export default ProductDetail;
+
+export async function getServerSideProps ( { query: { productUrl } } )
+{
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_STRAPI_URL }/products/?filters[productUrl]=${ productUrl }&populate=productImage` );
+    const { data: product } = await response.json();
+
+    return {
+        props: {
+            product
+        }
+    };
+}

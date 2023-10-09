@@ -1,13 +1,13 @@
 import Layaout from '@/components/layouts/Layaout';
 import Main from '../pages/main';
-import Products from '../components/layouts/Products';
+import ProductsCarousel from '../components/layouts/ProductsCarousel';
 import Link from 'next/link';
-import { StoreProvider } from '@/context/StoreProvider';
 
 
 
-export default function Home ()
+export default function Home ( { products } )
 {
+  console.log( products );
   return (
     <>
       {/* <StoreProvider> */}
@@ -17,7 +17,7 @@ export default function Home ()
 
         <h2 className='text-xl mt-5 mb-5 capitalize text-center' >Productos para ti.</h2>
 
-        <Products />
+        <ProductsCarousel products={products} />
 
         <div className='bg-red-600 flex flex-col justify-evenly h-44 text-center mt-5 mb-5'>
           <div className=''>
@@ -56,4 +56,16 @@ export default function Home ()
       {/* </StoreProvider> */}
     </>
   );
+}
+
+
+export async function getStaticProps ()
+{
+  const response = await fetch( 'http://127.0.0.1:1337/api/products?populate=productImage' );
+  const { data: products } = await response.json();
+  return {
+    props: {
+      products
+    }
+  };
 }

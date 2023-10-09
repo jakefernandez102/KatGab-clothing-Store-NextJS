@@ -1,5 +1,5 @@
-const { default: AuthContext } = require( "@/context/AuthProvider" );
-const { useContext } = require( "react" );
+import AuthContext  from  "@/context/AuthProvider"  ;
+import { useContext} from "react" 
 
 const useAuth = ()=>{
     return useContext(AuthContext)

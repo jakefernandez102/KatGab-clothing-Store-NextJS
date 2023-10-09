@@ -1,12 +1,15 @@
 import Layaout from '@/components/layouts/Layaout';
 import React from 'react'
 
-const Mujer = () => {
+const Cart = () => {
   return (
     <Layaout>
-        <div>Mujer</div>
+        
+        <div>
+
+        </div>
     </Layaout>
   )
 }
 
-export default Mujer
+export default Cart

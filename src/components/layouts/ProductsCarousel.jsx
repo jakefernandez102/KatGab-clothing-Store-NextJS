@@ -6,9 +6,9 @@ import Card from 'react-bootstrap/Card';
 import { useRouter } from 'next/router';
 import useStore from '@/hooks/useStore';
 
-const Products = () => {
+const ProductsCarousel = ({products}) => {
 
-  const {products}=useStore()
+  // const {products}=useStore()
 
   const router=useRouter()
 
@@ -20,21 +20,21 @@ const Products = () => {
     return acc;
   };
 
-  const handleClick=(id)=>{
-    router.push(`/product/${id}`)
+  const handleClick=(productUrl)=>{
+    router.push(`/product/${productUrl}`)
   }
   
   return (
     <Carousel  indicators={true}>
       {products?.reduce(reduceRecipes, []).map((item,idx) => (
         <Carousel.Item key={idx}>
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center ">
             {item.map((item,idx) => {
               return (
                 <Card 
                   key={idx} 
                   style={{ width: '18rem' }}
-                  className='flex flex-col justify-between'
+                  className='flex flex-col justify-between shadow-lg shadow-yellow-100'
                 >
                   
                   <Card.Img
@@ -54,7 +54,7 @@ const Products = () => {
                       type='button'
                       className='block w-100'
                       variant="warning" 
-                      onClick={e => handleClick(item.id)}
+                      onClick={e => handleClick(item.attributes.productUrl)}
                     >
                         Ver
                     </Button>
@@ -69,4 +69,4 @@ const Products = () => {
   )
 }
 
-export default Products
+export default ProductsCarousel;

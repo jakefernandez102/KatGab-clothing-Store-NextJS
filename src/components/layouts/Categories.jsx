@@ -20,11 +20,9 @@ const Categories = () => {
             {
                 categories.map(category =>(
                     <li key={category?.id} className=' group  relative dropdown  px-4  cursor-pointer text-base  tracking-wide'>
-                        <Link href={category?.attributes?.categoryUrl} passHref legacyBehavior>
-                            <a className={router.pathname === category?.attributes?.categoryUrl  ? 'text-amber-400  underline nav-item' : 'nav-item'}>
+                            <p className={router.pathname === category?.attributes?.categoryUrl  ? 'text-amber-400  underline nav-item' : 'nav-item'}>
                                 {category?.attributes?.categoryName} 
-                            </a>
-                        </Link> 
+                            </p>
                         <div className="group-hover:block dropdown-menu absolute hidden h-auto">
 
                             <ul className="top-0 w-48 bg-white shadow px-6 py-8">
@@ -34,7 +32,7 @@ const Categories = () => {
                                             key={subcategory.id} 
                                             className="py-1"
                                         >
-                                            <Link href={`/${category.attributes.categoryUrl}/${subcategory.attributes.name}`} passHref legacyBehavior >
+                                            <Link href={`/categories/${category.attributes.categoryUrl}/${subcategory.attributes.subCategoryUrl}`} passHref legacyBehavior >
                                                 <a 
                                                     className="nav-item block cursor-pointer "
                                                 >   
